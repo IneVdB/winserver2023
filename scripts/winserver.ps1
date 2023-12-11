@@ -30,14 +30,14 @@ function createWinServerVM {
     $fullUserName = 'Windows Server 2'
     $password = 'WS2023'
 
-    $sharedFolder = "$home\VirtualBox\sharedFolder"
+    $sharedFolder = (get-item "scripts/" ).parent.FullName
 
 
     # remove previous VM
-    VBoxManage controlvm    $vmName poweroff
-    VBoxManage unregistervm $vmName --delete
+    # VBoxManage controlvm    $vmName poweroff
+    # VBoxManage unregistervm $vmName --delete
 
-    rmdir -recurse $vmPath
+    # rmdir -recurse $vmPath
     # rmdir -recurse $sharedFolder
 
     # create VM
@@ -64,7 +64,7 @@ function createWinServerVM {
     VBoxManage modifyvm $vmName --memory $memSizeMb --vram $vramMb
 
     # shared folder
-    # VBoxManage sharedfolder add $vmName --name shr --hostpath $sharedFolder --automount
+    VBoxManage sharedfolder add $vmName --name shr --hostpath $sharedFolder --automount
 
     # clipboard mode
     VBoxManage modifyvm  $vmName --clipboard-mode bidirectional

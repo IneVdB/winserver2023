@@ -42,6 +42,7 @@ De ISO's van SQL Server 2019, Windows Server 2019, Sharepoint en Windows 10 staa
 - kies voor custom installatie
 - klik op next
 - wacht geduldig tot Windows Server geïnstalleerd is
+- kies een wachtwoord voor het admin account ('WinServer2023')
 
 ### Installatie Sharepoint server
 
