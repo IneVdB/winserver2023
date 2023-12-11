@@ -19,21 +19,14 @@ $vmPath = "VirtualBox VMs\$vmName"
 
 $userName = 'winserver2'
 $fullUserName = 'Windows Server 2'
-$password = 'WS2023'
+$password = 'WinServer2023'
 
-$hdSizeMb = 32 * 1024  # 32 GB
-$memSizeMb = 4 * 1024
+$hdSizeMb = 50 * 1024
+$memSizeMb = 2 * 1024
 $vramMb = 128
-$nofCPUs = 4
-$sharedFolder = "$home\VirtualBox\sharedFolder"
+$nofCPUs = 2
+$sharedFolder = (get-item "scripts/" ).parent.FullName
 
-
-# remove previous VM
-VBoxManage controlvm    $vmName poweroff
-VBoxManage unregistervm $vmName --delete
-
-rmdir -recurse $vmPath
-# rmdir -recurse $sharedFolder
 
 #detect
 VBoxManage.exe unattended detect --iso=$isoFile
@@ -52,6 +45,7 @@ VBoxManage storageattach $vmName --storagectl 'SATA Controller' --port 0 --devic
 VBoxManage storagectl    $vmName --name       'IDE Controller' --add ide
 VBoxManage storageattach $vmName --storagectl 'IDE Controller' --port 0 --device 0 --type dvddrive --medium $isoFile
 
+
 # enable apic
 VBoxManage modifyvm $vmName --ioapic on
 
@@ -62,7 +56,7 @@ VBoxManage modifyvm $vmName --boot1 dvd --boot2 disk --boot3 none --boot4 none
 VBoxManage modifyvm $vmName --memory $memSizeMb --vram $vramMb
 
 # shared folder
-# VBoxManage sharedfolder add $vmName --name shr --hostpath $sharedFolder --automount
+VBoxManage sharedfolder add $vmName --name shr --hostpath $sharedFolder --automount
 
 # clipboard mode
 VBoxManage modifyvm  $vmName --clipboard-mode bidirectional

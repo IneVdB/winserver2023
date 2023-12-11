@@ -23,22 +23,20 @@ function createWinServerVM {
 
     $osType = 'Windows10_64'
 
+    $image = 1
+    if ( ($vmName) -eq "DomainController" -or ($vmName) -eq "SPserver")
+    {
+        $image = 2
+    }   
+
     $vmPath = "VirtualBox VMs\$vmName"
     New-Item -Path "VirtualBox VMs\" -Name $vmName -ItemType Directory
 
     $userName = 'winserver2'
     $fullUserName = 'Windows Server 2'
-    $password = 'WS2023'
+    $password = 'WinServer2023'
 
     $sharedFolder = (get-item "scripts/" ).parent.FullName
-
-
-    # remove previous VM
-    # VBoxManage controlvm    $vmName poweroff
-    # VBoxManage unregistervm $vmName --delete
-
-    # rmdir -recurse $vmPath
-    # rmdir -recurse $sharedFolder
 
     # create VM
     VBoxManage createvm --name $vmName --ostype $osType --register
@@ -75,8 +73,15 @@ function createWinServerVM {
     # set cpus
     VBoxManage modifyvm $vmName --cpus $nofCPUs
 
-    # remove menus
-    VBoxManage setextradata $vmName GUI/RestrictedRuntimeMenus ALL 
+    VBoxManage unattended install $vmName      `
+        --iso=$isoFile                           `
+        --user=$userName                         `
+        --password=$password                     `
+        --full-user-name=$fullUserName           `
+        --install-additions                      `
+        --time-zone=CET                          `
+        --locale=be_EN                           `
+        --image-index=$image
 
     # start VM
     VBoxManage startvm $vmName

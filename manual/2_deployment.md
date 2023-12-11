@@ -12,64 +12,24 @@ De ISO's van SQL Server 2019, Windows Server 2019, Sharepoint en Windows 10 staa
 
 ## Opzet Windows server VMs
 
-
-### Installatie DomeinController
-
 - open een Powershell commandline als administrator
 - navigeer naar de plaats waar de scripts map staat, bijvoorbeeld `cd D:\winserver2\`
 - voer het script uit met `. ./scripts/winserver.ps1`
-- creer de VM met het commando `createWinServerVM -hdSizeMb 51250 -memSizeMb 2048 -vramMb 128 -nofCPUs 2 -vmName "DomainController"`
-- kies de juiste taalinstellingen
-- klik op 'install now'
-- klik op 'I don't have a product key' bij de product key activatie
-- kies de 2019 standard MET desktop experience uit de lijst
-- accepteer de license
-- kies voor custom installatie
-- klik op next
-- wacht geduldig tot Windows Server geïnstalleerd is
+- voer nu het volgende commando uit: `createWinServerVM -hdSizeMb 51250 -memSizeMb 2048 -vramMb 128 -nofCPUs 2 -vmName "DomainController"`
 
-### Installatie Certificate Authority server
+herhaal deze stappen voor alle VMs maar met de volgende commando's op het einde, open telkens een nieuw PowerShell venster:
 
-- open een Powershell commandline als administrator
-- navigeer naar de plaats waar de scripts map staat, bijvoorbeeld `cd D:\winserver2\`
-- voer het script uit met `. ./scripts/winserver.ps1`
-- creer de VM met het commando `createWinServerVM -hdSizeMb 30720 -memSizeMb 2048 -vramMb 128 -nofCPUs 2 -vmName "CAserver"`
-- kies de juiste taalinstellingen
-- klik op 'install now'
-- klik op 'I don't have a product key' bij de product key activatie
-- kies de 2019 standard ZONDER desktop experience uit de lijst
-- accepteer de license
-- kies voor custom installatie
-- klik op next
-- wacht geduldig tot Windows Server geïnstalleerd is
-- kies een wachtwoord voor het admin account ('WinServer2023')
+`createWinServerVM -hdSizeMb 30720 -memSizeMb 2048 -vramMb 128 -nofCPUs 2 -vmName "CAserver"`
 
-### Installatie Sharepoint server
+`createWinServerVM -hdSizeMb 51250 -memSizeMb 4096 -vramMb 128 -nofCPUs 2 -vmName "SPserver"`
 
-- open een Powershell commandline als administrator
-- navigeer naar de plaats waar de scripts map staat, bijvoorbeeld `cd D:\winserver2\`
-- voer het script uit met `. ./scripts/winserver.ps1`
-- creer de VM met het commando `createWinServerVM -hdSizeMb 51250 -memSizeMb 4096 -vramMb 128 -nofCPUs 2 -vmName "SPserver"`
-- kies de juiste taalinstellingen
-- klik op 'install now'
-- klik op 'I don't have a product key' bij de product key activatie
-- kies de 2019 standard desktop MET experience uit de lijst
-- accepteer de license
-- kies voor custom installatie
-- klik op next
-- wacht geduldig tot Windows Server geïnstalleerd is
+`createWinServerVM -hdSizeMb 30720 -memSizeMb 2048 -vramMb 128 -nofCPUs 4 -vmName "DBserver"`
 
-### Installatie Database server
+## Installatie GuestAdditions
 
-- open een Powershell commandline als administrator
-- navigeer naar de plaats waar de scripts map staat, bijvoorbeeld `cd D:\winserver2\`
-- voer het script uit met `. ./scripts/winserver.ps1`
-- creer de VM met het commando `createWinServerVM -hdSizeMb 30720 -memSizeMb 2048 -vramMb 128 -nofCPUs 4 -vmName "DBserver"`
-- kies de juiste taalinstellingen
-- klik op 'install now'
-- klik op 'I don't have a product key' bij de product key activatie
-- kies de 2019 standard ZONDER desktop experience uit de lijst
-- accepteer de license
-- kies voor custom installatie
-- klik op next
-- wacht geduldig tot Windows Server geïnstalleerd is
+### VM met GUI
+
+- In de bovenste balk selecteer Devices -> insert guest additions DC image
+- In de VM file explorer, ga naar This PC -> guest additions CD en dubbelklik op VBoxWindowsAdditions.exe
+- doorloop de installer, op het einde kies voor Reboot Now en klik op Finish
+- De VM herstart nu met GuestAdditions geïnstalleerd
