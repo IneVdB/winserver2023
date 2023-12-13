@@ -25,13 +25,13 @@ herhaal deze stappen voor alle VMs maar met de volgende commando's op het einde,
 
 `createWinServerVM -hdSizeMb 30720 -memSizeMb 2048 -vramMb 128 -nofCPUs 4 -vmName "DBserver"`
 
-## Installatie netwerk
+### Installatie NAT netwerk
 
 - open een Powershell commandline als administrator
 - navigeer naar de plaats waar de scripts map staat, bijvoorbeeld `cd D:\winserver2\`
 - voer het netwerk script uit met `./scripts/natnetwork.ps1`
   
-## Installatie GuestAdditions
+### Installatie GuestAdditions
 
 Doe dit voor alle Vm's:
 
@@ -42,7 +42,22 @@ Doe dit voor alle Vm's:
 - doorloop de installer met default settings, op het einde kies voor Reboot Now en klik op Finish
 - De VM herstart nu met GuestAdditions geïnstalleerd
 
-## Installatie DomainController
+### Netwerkinstellingen VM's
 
-- start de DomainController VM
-- 
+Doe dit voor alle VM's behalve de Windows 10 Client:
+
+- start de VM
+- open een command prompt als administrator
+- Typ `Z:` en Enter
+- voer het commando `PowerShell Set-ExecutionPolicy -ExecutionPolicy bypass` uit
+- voer dan het volgende commando uit, voor de juiste VM:
+
+DomainController: `PowerShell ". ./scripts/networkinit.ps1; setupNetwork -IP "192.168.23.12""`
+CAserver: `PowerShell ". ./scripts/networkinit.ps1; setupNetwork -IP "192.168.23.22""`
+SPserver: `PowerShell ". ./scripts/networkinit.ps1; setupNetwork -IP "192.168.23.32""`
+DBserver: `PowerShell ". ./scripts/networkinit.ps1; setupNetwork -IP "192.168.23.42""`
+
+De VM herstart automatisch met de juiste netwerkinstellingen.
+
+
+

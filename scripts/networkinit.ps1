@@ -1,27 +1,31 @@
-funtion setupNetwork {
+function setupNetwork {
 
     param (
-        $computerName,
-        $IPv4Address
+        $IP
     )
 
-    $IPv4Prefix = "24"
-    $IPv4GW = "192.168.23.1"
-    $IPv4DNS = "8.8.8.8"
+    $MaskBits = 24
+    $Gateway = "192.168.23.1"
+    $Dns = "8.8.8.8"
+    $IPType = "IPv4"
 
-    $ipIF = (Get-NetAdapter).ifIndex
+    $adapter = Get-NetAdapter | ? {$_.Status -eq "up"}
 
-    Set-NetIPv6Protocol -RandomizeIdentifiers Disabled
-    Set-NetIPv6Protocol -UseTemporaryAddresses Disabled
+    If (($adapter | Get-NetIPConfiguration).IPv4Address.IPAddress) {
+        $adapter | Remove-NetIPAddress -AddressFamily $IPType -Confirm:$false
+    }
+    If (($adapter | Get-NetIPConfiguration).Ipv4DefaultGateway) {
+        $adapter | Remove-NetRoute -AddressFamily $IPType -Confirm:$false
+    }
 
-    Set-Net6to4Configuration -State Disabled
-    Set-NetIsatapConfiguration -State Disabled
-    Set-NetTeredoConfiguration -Type Disabled
+    $adapter | New-NetIPAddress `
+        -AddressFamily $IPType `
+        -IPAddress $IP `
+        -PrefixLength $MaskBits `
+        -DefaultGateway $Gateway
 
-    New-NetIPAddress -InterfaceIndex $ipIF -IPAddress $IPv4Address -PrefixLength $IPv4Prefix -DefaultGateway $IPv4GW
-    Set-DNSClientServerAddress –interfaceIndex $ipIF –ServerAddresses $IPv4DNS
+    $adapter | Set-DnsClientServerAddress -ServerAddresses $DNS
 
-    Rename-Computer -NewName $computerName -force
     Restart-Computer
 
 }
