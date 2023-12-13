@@ -10,7 +10,7 @@ De ISO's van SQL Server 2019, Windows Server 2019, Sharepoint en Windows 10 staa
 - navigeer naar de plaats waar de scripts map staat, bijvoorbeeld `cd D:\winserver2\`
 - voer het script uit met `./scripts/windows10.ps1`
 
-## Opzet Windows server VMs
+## Installatie Windows Server VMs
 
 - open een Powershell commandline als administrator
 - navigeer naar de plaats waar de scripts map staat, bijvoorbeeld `cd D:\winserver2\`
@@ -25,11 +25,24 @@ herhaal deze stappen voor alle VMs maar met de volgende commando's op het einde,
 
 `createWinServerVM -hdSizeMb 30720 -memSizeMb 2048 -vramMb 128 -nofCPUs 4 -vmName "DBserver"`
 
+## Installatie netwerk
+
+- open een Powershell commandline als administrator
+- navigeer naar de plaats waar de scripts map staat, bijvoorbeeld `cd D:\winserver2\`
+- voer het netwerk script uit met `./scripts/natnetwork.ps1`
+  
 ## Installatie GuestAdditions
 
-### VM met GUI
+Doe dit voor alle Vm's:
 
 - In de bovenste balk selecteer Devices -> insert guest additions DC image
-- In de VM file explorer, ga naar This PC -> guest additions CD en dubbelklik op VBoxWindowsAdditions.exe
-- doorloop de installer, op het einde kies voor Reboot Now en klik op Finish
+- (op desktop experience) open een command prompt
+- verander naar de CD drive met `E:`
+- installeer de Guestadditions met `VBoxWindowsAdditions.exe /l` (`VBoxWindowsAdditions.exe /S` is ook een optie indien geen output gewenst is)
+- doorloop de installer met default settings, op het einde kies voor Reboot Now en klik op Finish
 - De VM herstart nu met GuestAdditions geïnstalleerd
+
+## Installatie DomainController
+
+- start de DomainController VM
+- 

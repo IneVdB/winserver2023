@@ -5,11 +5,8 @@ funtion setupNetwork {
         $IPv4Address
     )
 
-    #$computerName = "dc1"
-
-    #$IPv4Address = "192.168.23.22"
     $IPv4Prefix = "24"
-    $IPv4GW = "192.168.23.10"
+    $IPv4GW = "192.168.23.1"
     $IPv4DNS = "8.8.8.8"
 
     $ipIF = (Get-NetAdapter).ifIndex

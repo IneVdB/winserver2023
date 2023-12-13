@@ -74,7 +74,8 @@ VBoxManage unattended install $vmName      `
   --password=$password                     `
   --full-user-name=$fullUserName           `
   --install-additions                      `
-  --time-zone=CET
+  --time-zone=CET                          `
+  --locale=be_EN  
   
 
 # remove menus
