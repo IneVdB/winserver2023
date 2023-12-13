@@ -53,8 +53,11 @@ Doe dit voor alle VM's behalve de Windows 10 Client:
 - voer dan het volgende commando uit, voor de juiste VM:
 
 DomainController: `PowerShell ". ./scripts/networkinit.ps1; setupNetwork -IP "192.168.23.12""`
+
 CAserver: `PowerShell ". ./scripts/networkinit.ps1; setupNetwork -IP "192.168.23.22""`
+
 SPserver: `PowerShell ". ./scripts/networkinit.ps1; setupNetwork -IP "192.168.23.32""`
+
 DBserver: `PowerShell ". ./scripts/networkinit.ps1; setupNetwork -IP "192.168.23.42""`
 
 De VM herstart automatisch met de juiste netwerkinstellingen.
