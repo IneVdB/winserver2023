@@ -1,7 +1,7 @@
 # Define DNS and Sites & Services Settings
-$IPv4netID = "192.168.23.22"
-$siteName = "WinServer2"
-$location = "Hogent"
+$IPv4netID = "192.168.23.0"
+$siteName = "WS2-2324-ine"
+$location = "hogent"
 
 # Define Authoritative Internet Time Servers
 $timePeerList = "time.google.com time1.google.com"
@@ -18,7 +18,7 @@ New-ADReplicationSubnet -Name $IPv4netID -site $siteName -Location $location
 Register-DnsClient
 
 # Enable Default Aging/Scavenging Settings for All Zones and this DNS Server
-Set-DnsServerScavenging –ScavengingState $True –ScavengingInterval 7:00:00:00 –ApplyOnAllZones
+Set-DnsServerScavenging -ScavengingState $True -ScavengingInterval 7:00:00:00 -ApplyOnAllZones
 $Zones = Get-DnsServerZone | Where-Object {$_.IsAutoCreated -eq $False -and $_.ZoneName -ne 'TrustAnchors'}
 $Zones | Set-DnsServerZoneAging -Aging $True
 

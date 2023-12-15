@@ -1,6 +1,6 @@
 $domainName  = "WS2-2324-ine.hogent"
 $netBIOSname = "WS2-2324-ine"
-$mode  = "Win2016"
+$mode  = "Default"
 
 Install-WindowsFeature AD-Domain-Services -IncludeAllSubFeature -IncludeManagementTools
 
@@ -37,6 +37,4 @@ New-ADOrganizationalUnit "Users" -path $resourcesDN
 
 $ForestFQDN = "WS2-2324-ine.hogent"
 $SchemaDC   = "dc1.WS2-2324-ine.hogent"
-
-Enable-ADOptionalFeature –Identity 'Recycle Bin Feature' –Scope ForestOrConfigurationSet –Target $ForestFQDN -Server $SchemaDC -confirm:$false
 

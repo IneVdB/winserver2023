@@ -13,6 +13,8 @@ if (-not (test-path $isoFile)) {
     return
 }
 
+New-Item -Path "VirtualBox VMs\" -Name $vmName -ItemType Directory
+
 $osType = 'Windows10_64'
 
 $vmPath = "VirtualBox VMs\$vmName"

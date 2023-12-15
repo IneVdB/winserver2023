@@ -60,7 +60,16 @@ SPserver: `PowerShell ". ./scripts/networkinit.ps1; setupNetwork -IP "192.168.23
 
 DBserver: `PowerShell ". ./scripts/networkinit.ps1; setupNetwork -IP "192.168.23.42""`
 
+
 De VM herstart automatisch met de juiste netwerkinstellingen.
+
+### Initializatie DomainController
+
+- Open een powershell venster als admin op de DomainController VM
+- verander naar de juiste map met `cd Z:/scripts`
+- voer het script uit met `./dcinitialize.ps1`
+
+Wanneer de dns, sqlserver en sharepoint scripts werken worden deze op gelijkaardige manier uitgevoerd.
 
 
 
