@@ -13,7 +13,10 @@ if (-not (test-path $isoFile)) {
     return
 }
 
-New-Item -Path "VirtualBox VMs\" -Name $vmName -ItemType Directory
+# remove existing settings
+Remove-Item -LiteralPath "$env:USERPROFILE\VirtualBox VMs\$vmName" -Force -Recurse -ErrorAction SilentlyContinue
+
+New-Item -Path "VirtualBox VMs\" -Name $vmName -ItemType Directory -Force
 
 $osType = 'Windows10_64'
 
@@ -35,6 +38,7 @@ VBoxManage.exe unattended detect --iso=$isoFile
 
 # create VM
 VBoxManage createvm --name $vmName --ostype $osType --register
+
 
 # create hard drive
 VBoxManage createmedium --filename $vmPath\hard-drive.vdi --size $hdSizeMb
@@ -69,6 +73,11 @@ VBoxManage modifyvm  $vmName --graphicscontroller vboxsvga
 # set cpus
 VBoxManage modifyvm $vmName --cpus $nofCPUs
 
+VBoxManage modifyvm WindowsClient --nic1 natnetwork --nat-network1 natnet1
+
+$postInstall="powershell.exe -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command E:/vboxadditions/VBoxWindowsAdditions.exe /S ; shutdown /r"
+
+
 # install
 VBoxManage unattended install $vmName      `
   --iso=$isoFile                           `
@@ -77,8 +86,10 @@ VBoxManage unattended install $vmName      `
   --full-user-name=$fullUserName           `
   --install-additions                      `
   --time-zone=CET                          `
-  --locale=be_EN  
-  
+  --locale=be_EN                           `
+  --key=DR2NF-6G3PF-D3BVR-KKRJY-PR473      `
+  --post-install-command=$postInstall      `
+  --image-index=1
 
 # remove menus
 VBoxManage setextradata $vmName GUI/RestrictedRuntimeMenus ALL 
@@ -90,4 +101,4 @@ VBoxManage startvm $vmName
 VBoxManage controlvm $vmName setvideomodehint 1200 900  32
 
 # wait for finished installation
-VBoxManage guestproperty wait $vmName installation_finished
+# VBoxManage guestproperty wait $vmName installation_finished

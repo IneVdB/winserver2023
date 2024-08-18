@@ -13,7 +13,7 @@ $forestProperties = @{
     ForestMode           = $mode
     DomainMode           = $mode
     CreateDnsDelegation  = $false
-    InstallDns           = $true
+    InstallDns           = $false
     DatabasePath         = "C:\Windows\NTDS"
     LogPath              = "C:\Windows\NTDS"
     SysvolPath           = "C:\Windows\SYSVOL"
@@ -24,17 +24,16 @@ $forestProperties = @{
 
 Install-ADDSForest @forestProperties
 
-$baseDN = "DC=WS2-2324-ine,DC=hogent"
-$resourcesDN = "OU=Resources," + $baseDN
+#$baseDN = "DC=WS2-2324-ine,DC=hogent"
+#$resourcesDN = "OU=Resources," + $baseDN
 
-New-ADOrganizationalUnit "Resources" -path $baseDN
-New-ADOrganizationalUnit "Admin Users" -path $resourcesDN
-New-ADOrganizationalUnit "Groups Security" -path $resourcesDN
-New-ADOrganizationalUnit "Service Accounts" -path $resourcesDN
-New-ADOrganizationalUnit "Workstations" -path $resourcesDN
-New-ADOrganizationalUnit "Servers" -path $resourcesDN
-New-ADOrganizationalUnit "Users" -path $resourcesDN
+#New-ADOrganizationalUnit "Resources" -path $baseDN
+#New-ADOrganizationalUnit "Admin Users" -path $resourcesDN
+#New-ADOrganizationalUnit "Groups Security" -path $resourcesDN
+#New-ADOrganizationalUnit "Service Accounts" -path $resourcesDN
+#New-ADOrganizationalUnit "Workstations" -path $resourcesDN
+#New-ADOrganizationalUnit "Servers" -path $resourcesDN
+#New-ADOrganizationalUnit "Users" -path $resourcesDN
 
-$ForestFQDN = "WS2-2324-ine.hogent"
-$SchemaDC   = "dc1.WS2-2324-ine.hogent"
-
+#$ForestFQDN = "WS2-2324-ine.hogent"
+#$SchemaDC   = "dc1.WS2-2324-ine.hogent"

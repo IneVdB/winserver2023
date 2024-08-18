@@ -14,6 +14,9 @@ function createWinServerVM {
         $env:path = "C:\Program Files\Oracle\VirtualBox;$env:path"
     }
 
+    # remove existing settings
+    Remove-Item -LiteralPath "$env:USERPROFILE\VirtualBox VMs\$vmName" -Force -Recurse -ErrorAction SilentlyContinue
+
     $isoFile = "isos\en_windows_server_2019_x64_dvd_4cb967d8.iso"
 
     if (-not (test-path $isoFile)) {
@@ -30,7 +33,7 @@ function createWinServerVM {
     }   
 
     $vmPath = "VirtualBox VMs\$vmName"
-    New-Item -Path "VirtualBox VMs\" -Name $vmName -ItemType Directory
+    New-Item -Path "VirtualBox VMs\" -Name $vmName -ItemType Directory -Force
 
     $userName = 'winserver2'
     $fullUserName = 'Windows Server 2'
@@ -70,6 +73,10 @@ function createWinServerVM {
     # vbox svga
     VBoxManage modifyvm  $vmName --graphicscontroller vboxsvga
 
+    VBoxManage modifyvm $vmName --nic1 natnetwork --nat-network1 natnet1
+
+    $postInstall="powershell.exe -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command E:/vboxadditions/VBoxWindowsAdditions.exe /S ; shutdown /r"
+
     # set cpus
     VBoxManage modifyvm $vmName --cpus $nofCPUs
 
@@ -81,7 +88,11 @@ function createWinServerVM {
         --install-additions                      `
         --time-zone=CET                          `
         --locale=be_EN                           `
-        --image-index=$image
+        --image-index=$image                     `
+        --key=V82N947P28FM8VV4HJG43DDVJ          `
+        --post-install-command=$postInstall
+
+    VBoxManage setextradata $vmName GUI/RestrictedRuntimeMenus ALL
 
     # start VM
     VBoxManage startvm $vmName
@@ -90,5 +101,5 @@ function createWinServerVM {
     VBoxManage controlvm $vmName setvideomodehint 1200 900  32
 
     # wait for finished installation
-    VBoxManage guestproperty wait $vmName installation_finished
+    #VBoxManage guestproperty wait $vmName installation_finished
 }
