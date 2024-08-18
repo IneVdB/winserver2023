@@ -4,7 +4,7 @@
 
 De ISO's van SQL Server 2019, Windows Server 2019, Sharepoint en Windows 10 staan in een map genaamd `isos` die op dezelfde locatie staat als waar het script wordt uitgevoerd. In het geval van het voorbeeld is dit D:\winserver2\
 
-## Scripts toestaan
+## Scripts toestaan op de hostmachine
 
 - open een powershell commandline als administrator
 - voer het volgende commando uit `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine`
@@ -77,12 +77,45 @@ herhaal deze stappen voor alle VMs maar met de volgende commando's op het einde,
 - voer dan het volgende commando uit: `. Z:\scripts\networkinit.ps1; setupNetwork -IP "192.168.23.22"`
 - Het wachtwoord is `WinServer2023`
 - De VM herstart automatisch met de juiste netwerkinstellingen.
+- 
+### Setup 
+
+- Open een powershell venster als admin op de CAserver VM
+- voer het script uit met `Z:/scripts/CA.ps1`
+- typ Y en enter
+- Voer het volgende commando uit in powershell: `Z:\scripts\dns_secondary.ps1`
+
+Op de DOMAINCONTROLLER, voer volgend commando uit in admin powershell:
+`Set-DnsServerPrimaryZone -Name “WS2-2324-ine.hogent” -Notify Notifyservers -notifyservers “192.168.23.22” -SecondaryServers “192.168.23.22” -SecureSecondaries TransferToSecureServers`
+De server heeft nu de DNS records van de primary dns server (de domeincontroller)
+
+
+## Initialisatie SPserver
+
+### Netwerk
+
+- start de VM
+- open PowerShell als administrator (indien er geen gui is, typ powershell en klik op enter om powershell te openen, indien wel klik op het zoek icoon en typ 'powershell' en rechtermuisklik op de optie Windows PowerShell en kies 'Run as Administrator')
+- voer het commando `Set-ExecutionPolicy -ExecutionPolicy bypass` uit
+- typ Y en enter
+- voer dan het volgende commando uit: `. Z:\scripts\networkinit.ps1; setupNetwork -IP "192.168.23.32"`
+- Het wachtwoord is `WinServer2023`
+- De VM herstart automatisch met de juiste netwerkinstellingen.
 
 ### Setup 
 
-- Open een powershell venster als admin op de DBserver VM
-- voer het script uit met `Z:/scripts/CA.ps1`
-- typ Y en enter
+- Open een powershell venster als admin op de SPserver VM
+- voer het script uit met `Z:/scripts/sharepoint_prerequisites.ps1`
+- De product key is `XNPCY-7K9B8-Y63P8-82MVM-39P2H`
+- SharePoint wordt automatisch geïnstalleerd
+- klik op close en yes zodat de server herstart
+
+### config sharepoint
+
+- in de configuratie wizard, klik op next en yes zodat de services worden herstart
+- kies connect to an existing farm
+- database server: `DBserver`
+- database name: `MSSQLSERVER`
 
 
 ## Installatie Windows 10 Client
@@ -92,9 +125,7 @@ herhaal deze stappen voor alle VMs maar met de volgende commando's op het einde,
 - voer het script uit met `./scripts/windows10.ps1`
 - in de VM, klik op next
 - wacht tot de VM geïnstalleerd is
-- open een command prompt als admin (typ in de zoekbalk cmd, rechterklik erop en kier run as administrator)
+- open een command prompt als admin op de windows client vm (typ in de zoekbalk cmd, rechterklik erop en kier run as administrator)
 - voer het volgende commando uit: `Z:/scripts/client.bat`
 - SQL Server Management Studio wordt automatisch geïnstalleerd
-
-
-
+ 

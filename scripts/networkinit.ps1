@@ -6,7 +6,6 @@ function setupNetwork {
 
     $MaskBits = 24
     $Gateway = "192.168.23.1"
-    $Dns = "192.168.23.12"
     $IPType = "IPv4"
 
     $adapter = Get-NetAdapter | ? {$_.Status -eq "up"}
@@ -29,7 +28,7 @@ function setupNetwork {
         -PrefixLength $MaskBits `
         -DefaultGateway $Gateway
 
-        $adapter | Set-DnsClientServerAddress -ServerAddresses $DNS
+        $adapter | Set-DnsClientServerAddress -ServerAddresses ("192.168.23.12", "192.168.23.22")
             
         if ($IP -ne "192.168.23.12") {
             Add-Computer WS2-2324-ine.hogent -Credential WS2-2324-ine\winserver2

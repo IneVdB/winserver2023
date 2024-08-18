@@ -44,4 +44,4 @@ Write-Host $errorOutput
 Dismount-DiskImage -InputObject $drive
 
 
-Install-Module -Name SqlServer -RequiredVersion 22.2.0 -ErrorAction SilentlyContinue
+#Install-Module -Name SqlServer -RequiredVersion 22.2.0 -ErrorAction SilentlyContinue
