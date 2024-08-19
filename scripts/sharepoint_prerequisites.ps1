@@ -31,7 +31,7 @@ if ($driveLetter)
 {
     Write-Host "Starting prerequisites install of Sharepoint Server"
     Start-Process $driveLetter\PrerequisiteInstaller.exe -Wait -RedirectStandardOutput $standardOutputFile -RedirectStandardError $errorOutputFile
-    Z:/scripts/sharepoint_install.ps1
+    #Z:/scripts/sharepoint_install.ps1
 }
 
 $standardOutput = Get-Content $standardOutputFile -Delimiter "\r\n"

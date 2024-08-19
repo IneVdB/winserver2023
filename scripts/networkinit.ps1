@@ -4,6 +4,8 @@ function setupNetwork {
         $IP
     )
 
+    New-NetFirewallRule -DisplayName "Allow inbound internal" -Direction Inbound -RemoteAddress "192.168.23.1-192.168.23.200" -Action Allow
+
     $MaskBits = 24
     $Gateway = "192.168.23.1"
     $IPType = "IPv4"
@@ -29,13 +31,11 @@ function setupNetwork {
         -DefaultGateway $Gateway
 
         $adapter | Set-DnsClientServerAddress -ServerAddresses ("192.168.23.12", "192.168.23.22")
-            
-        if ($IP -ne "192.168.23.12") {
-            Add-Computer WS2-2324-ine.hogent -Credential WS2-2324-ine\winserver2
-        }
-
     }
 
+    if ($IP -ne "192.168.23.12") {
+        Add-Computer WS2-2324-ine.hogent -Credential WS2-2324-ine\winserver2
+    }
 
     Restart-Computer
 

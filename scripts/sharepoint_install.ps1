@@ -18,7 +18,7 @@ foreach ($disk in $disks){
 
 if ($driveLetter)
 {
-    Write-Host "Starting prerequisites install of Sharepoint Server"
+    Write-Host "Starting install of Sharepoint Server"
     Start-Process $driveLetter\setup.exe -Wait -RedirectStandardOutput $standardOutputFile -RedirectStandardError $errorOutputFile
 }
 

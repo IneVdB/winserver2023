@@ -1,4 +1,5 @@
 Add-WindowsFeature Adcs-Cert-Authority -IncludeManagementTools
-Install-AdcsCertificationAuthority -CAType EnterpriseRootCA
 
-Restart-Computer
+Install-AdcsCertificationAuthority 
+
+#Restart-Computer
