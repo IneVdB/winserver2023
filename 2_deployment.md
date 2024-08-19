@@ -27,7 +27,7 @@ herhaal dit commando voor alle VMs maar met de volgende argumenten:
 
 `. ./scripts/winserver.ps1 ; createWinServerVM -hdSizeMb 30720 -memSizeMb 1024 -vramMb 128 -nofCPUs 2 -vmName "CAserver"`
 
-`. ./scripts/winserver.ps1 ; createWinServerVM -hdSizeMb 51250 -memSizeMb 4096 -vramMb 128 -nofCPUs 2 -vmName "SPserver"`
+`. ./scripts/winserver.ps1 ; createWinServerVM -hdSizeMb 51250 -memSizeMb 3500 -vramMb 128 -nofCPUs 2 -vmName "SPserver"`
 
 `. ./scripts/winserver.ps1 ; createWinServerVM -hdSizeMb 30720 -memSizeMb 2048 -vramMb 128 -nofCPUs 4 -vmName "DBserver"`
 
@@ -37,7 +37,7 @@ herhaal dit commando voor alle VMs maar met de volgende argumenten:
 ### Netwerk
 
 - start de VM
-- open PowerShell als administrator (indien er geen gui is, typ powershell en klik op enter om powershell te openen, indien wel klik op het zoek icoon en typ 'powershell' en rechtermuisklik op de optie Windows PowerShell en kies 'Run as Administrator')
+- open PowerShell als administrator (klik op het zoek icoon en typ 'powershell' en rechtermuisklik op de optie Windows PowerShell en kies 'Run as Administrator')
 - voer het commando `Set-ExecutionPolicy -ExecutionPolicy bypass` uit
 - typ `Y` en Enter
 - voer dan het volgende commando uit: `. Z:\scripts\networkinit.ps1; setupNetwork -IP "192.168.23.12"`
@@ -100,21 +100,17 @@ De server heeft nu de DNS records van de primary dns server (de domeincontroller
 - voer het volgende commando uit in een admin powershell venster na heropstarten van de windows client:
    `Add-Computer WS2-2324-ine.hogent -Credential WS2-2324-ine\winserver2; restart-computer`
 
-- open een command prompt als admin op de windows client vm (typ in de zoekbalk cmd, rechterklik erop en kier run as administrator)
+- open een command prompt als admin op de windows client vm (typ in de zoekbalk cmd, rechterklik erop en kies run as administrator)
 - voer het volgende commando uit: `Z:/scripts/client.bat`
 - SQL Server Management Studio wordt automatisch geïnstalleerd
 
 ### Database verbinding
 
-- Om de sql server verbinding te testen, log uit en terug in met een andere gebruiker, zie credentials hieronder, maar dan binnen het domein.
+- Om de sql server verbinding te testen, log uit en terug in met de winserver2 gebruiker, zie credentials onderaan, maar dan binnen het domein.
 - open SQL management studio
 - server name is `DBserver`
 - klik bij inloggen op trust certificate want de CA werkt niet volledig.
-
-- Eens verbonden, dubbelklik op de database aan de linkerkant zodat het openklapt.
-- rechtermuisklik op databases en kies new database
-- geef het de naam `sharepointdb`en klik op ok
-
+  
 ## Initialisatie SPserver
 
 ### Netwerk
@@ -145,16 +141,24 @@ De server heeft nu de DNS records van de primary dns server (de domeincontroller
 ### config sharepoint
 
 - in de configuratie wizard, klik op next en yes zodat de services worden herstart
-- kies connect to an existing farm
-- database server: `DBserver\MSSQLSERVER`
+- kies create a new server farm
+- database server: `DBserver`
 - database name: `sharepointdb`
+- username: `WS2-2324-ine\winserver2`
+- Password: `WinServer2023`
+- klik op next
+- Passphrase: `WinServer2023`
+- kies voor single server farm
+- kies ntlm, de rest blijft default
+- klik op finish, de admin pagina van sharepoint wordt nu geladen in een browser.
+De verdere configuratie kan doorlopen worden maar is niet getest.
 
 ## Credentials
 
 Om testen te vergemakkelijken is er 1 account voorzien:
 
-Gebruikersnaam: winserver2
-Wachtwoord: WinServer2023
+Gebruikersnaam: `winserver2`
+Wachtwoord: `WinServer2023`
 
 In een echte omgeving zouden verschillende logins voor verschillende diensten worden geïmplementeerd.
  
